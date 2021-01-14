@@ -1,23 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-
-namespace backend.Models
+﻿namespace WebApplication1.Models
 {
     public class GameImport
     {
-        public int Id { get; set; }
-        public string Titel { get; set; }
-        public string Thumbnail { get; set; }
-        public string ShortDescription { get; set; }
-        public string GameUrl { get; set; }
-        public string Genre { get; set; }
-        public string Platform { get; set; }
-        public string Publisher { get; set; }
-        public string Developer { get; set; }
-        public string ReleaseDate { get; set; }
-        public string F2pUrl { get; set; }
+        // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse); 
+        public class GameInfo
+        {
+            public int id { get; set; }
+            public string title { get; set; }
+            public string thumbnail { get; set; }
+            public string short_description { get; set; }
+            public string game_url { get; set; }
+            public string genre { get; set; }
+            public string platform { get; set; }
+            public string publisher { get; set; }
+            public string developer { get; set; }
+            public string release_date { get; set; }
+            public string freetogame_profile_url { get; set; }
+        }
     }
 }

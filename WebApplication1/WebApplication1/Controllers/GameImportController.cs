@@ -1,5 +1,4 @@
-﻿using backend.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
@@ -8,7 +7,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using WebApplication1.Models;
 using static WebApplication1.Models.GameInfoWithID;
-using static WebApplication1.Models.JsonImport;
+using static WebApplication1.Models.GameImport;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -24,7 +23,7 @@ namespace backend.Controllers
         {
             string url = "https://www.freetogame.com/api/games";
 
-            var gameImport = new GameImport();
+            
             using (var client = new HttpClient())
             {
                 using (var response = await client.GetAsync(url))
@@ -64,9 +63,9 @@ namespace backend.Controllers
                     readerStream.Close();
 
                     //converts all items to object
-                    var gameInfo = JsonConvert.DeserializeObject<RootWithId>(data);    
-                    
-                    return Ok(data);
+                    var gameInfo = JsonConvert.DeserializeObject<GameInfoWithID.RootWithId>(data);
+
+                    return Ok(gameInfo);
                 }
             }
         }
