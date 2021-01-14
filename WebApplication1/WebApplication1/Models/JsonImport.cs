@@ -3,7 +3,7 @@
     public class JsonImport
     {
         // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse); 
-        public class Root
+        public class GameInfo
         {
             public int id { get; set; }
             public string title { get; set; }
