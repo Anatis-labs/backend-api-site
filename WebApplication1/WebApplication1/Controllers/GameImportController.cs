@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using WebApplication1.Models;
 using static WebApplication1.Models.GameInfoWithID;
 using static WebApplication1.Models.GameImport;
+using Microsoft.Extensions.Caching.Memory;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -23,7 +24,7 @@ namespace backend.Controllers
         {
             string url = "https://www.freetogame.com/api/games";
 
-            
+
             using (var client = new HttpClient())
             {
                 using (var response = await client.GetAsync(url))
@@ -45,12 +46,11 @@ namespace backend.Controllers
 
 
         // GET api/<GameImportController>/5
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        [HttpGet("{type}")]
+        public async Task<IActionResult> Get(string type)
         {
-            string url = " https://www.freetogame.com/api/game?id=" + id;
+            string url = "https://www.freetogame.com/api/games?category=" + type;
 
-            var gameInfoWithID = new GameInfoWithID();
             using (var client = new HttpClient())
             {
                 using (var response = await client.GetAsync(url))
@@ -63,9 +63,9 @@ namespace backend.Controllers
                     readerStream.Close();
 
                     //converts all items to object
-                    var gameInfo = JsonConvert.DeserializeObject<GameInfoWithID.RootWithId>(data);
+                    List<GameInfo> games = JsonConvert.DeserializeObject<List<GameInfo>>(data);
 
-                    return Ok(gameInfo);
+                    return Ok(games);
                 }
             }
         }
