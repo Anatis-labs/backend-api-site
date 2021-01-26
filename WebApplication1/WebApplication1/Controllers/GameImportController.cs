@@ -36,11 +36,11 @@ namespace backend.Controllers
             string url = "https://www.freetogame.com/api/games";
 
 
-            //var casheKey = $"Get_On_Location--{""}";
-            //if (_memoryCashe.TryGetValue(casheKey, out string cashedValue))
-            //{
-            //    return Ok(cashedValue);
-            //}
+            var casheKey = $"GetAll_games";
+            if (_memoryCashe.TryGetValue(casheKey, out string cashedValue))
+            {
+                return Ok(cashedValue);
+            }
 
 
             using (var client = new HttpClient())
@@ -57,7 +57,7 @@ namespace backend.Controllers
                     //converts all items to object
                     List<GameInfo> allGames = JsonConvert.DeserializeObject<List<GameInfo>>(data);
 
-                    //_memoryCashe.Set(casheKey, allGames);
+                    _memoryCashe.Set(casheKey, allGames);
 
                     return Ok(allGames);
                 }
