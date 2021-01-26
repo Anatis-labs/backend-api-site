@@ -9,6 +9,7 @@ using WebApplication1.Models;
 using static WebApplication1.Models.GameInfoWithID;
 using static WebApplication1.Models.GameImport;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -19,10 +20,27 @@ namespace backend.Controllers
     [ApiController]
     public class GameImportController : ControllerBase
     {
+        private readonly IMemoryCache _memoryCashe;
+        private readonly ILogger<GameImportController> _logger;
+
+        public GameImportController(ILogger<GameImportController> logger, IMemoryCache memoryCache)
+        {
+            _logger = logger;
+            _memoryCashe = memoryCache;
+        }
+
+
         [HttpGet]
         public async Task<IActionResult> Get()
         {
             string url = "https://www.freetogame.com/api/games";
+
+
+            //var casheKey = $"Get_On_Location--{""}";
+            //if (_memoryCashe.TryGetValue(casheKey, out string cashedValue))
+            //{
+            //    return Ok(cashedValue);
+            //}
 
 
             using (var client = new HttpClient())
@@ -37,9 +55,11 @@ namespace backend.Controllers
                     readerStream.Close();
 
                     //converts all items to object
-                    List<GameInfo> games = JsonConvert.DeserializeObject<List<GameInfo>>(data);
+                    List<GameInfo> allGames = JsonConvert.DeserializeObject<List<GameInfo>>(data);
 
-                    return Ok(games);
+                    //_memoryCashe.Set(casheKey, allGames);
+
+                    return Ok(allGames);
                 }
             }
         }
@@ -51,6 +71,15 @@ namespace backend.Controllers
         {
             string url = "https://www.freetogame.com/api/games?category=" + type;
 
+
+            var casheKey = $"Get_On_Location--{type}";
+            if (_memoryCashe.TryGetValue(casheKey, out string cashedValue))
+            {
+                return Ok(cashedValue);
+            }
+
+
+
             using (var client = new HttpClient())
             {
                 using (var response = await client.GetAsync(url))
@@ -65,27 +94,29 @@ namespace backend.Controllers
                     //converts all items to object
                     List<GameInfo> games = JsonConvert.DeserializeObject<List<GameInfo>>(data);
 
+                    _memoryCashe.Set(casheKey, games);
+
                     return Ok(games);
                 }
             }
         }
 
-        // POST api/<GameImportController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
+        //// POST api/<GameImportController>
+        //[HttpPost]
+        //public void Post([FromBody] string value)
+        //{
+        //}
 
-        // PUT api/<GameImportController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
+        //// PUT api/<GameImportController>/5
+        //[HttpPut("{id}")]
+        //public void Put(int id, [FromBody] string value)
+        //{
+        //}
 
-        // DELETE api/<GameImportController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+        //// DELETE api/<GameImportController>/5
+        //[HttpDelete("{id}")]
+        //public void Delete(int id)
+        //{
+        //}
     }
 }
