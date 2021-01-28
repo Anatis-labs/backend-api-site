@@ -29,13 +29,13 @@ namespace WebApplication1.Controllers
         }
 
 
-        // GET: api/<GameInfo>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
+        //// GET: api/<GameInfo>
+        //[HttpGet]
+        //public IEnumerable<string> Get()
+        //{
+        //    return new string[] { "value1", "value2" };
+        //}
+        [ResponseCache(VaryByHeader = "User-Agent", Duration = 30)]
         // GET api/<GameImportController>/5
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
