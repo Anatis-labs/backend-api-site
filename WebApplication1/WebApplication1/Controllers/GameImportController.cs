@@ -29,7 +29,7 @@ namespace backend.Controllers
             _memoryCashe = memoryCache;
         }
 
-
+        [ResponseCache(VaryByHeader = "User-Agent", Duration = 30)]
         [HttpGet]
         public async Task<IActionResult> Get()
         {
@@ -64,7 +64,7 @@ namespace backend.Controllers
             }
         }
 
-
+        [ResponseCache(VaryByHeader = "User-Agent", Duration = 30)]
         // GET api/<GameImportController>/5
         [HttpGet("{type}")]
         public async Task<IActionResult> Get(string type)
